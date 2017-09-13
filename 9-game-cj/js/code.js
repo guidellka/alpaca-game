@@ -921,7 +921,7 @@ function updateGameplay() {
                 FB.ui({
                     method: 'share',
                     display: 'popup',
-                    quote: 'เราได้คะแนน ' + pic + ' มาเล่น Cannone Jump ด้วยกันนะ ><',
+                    quote: 'เราได้คะแนน ' + parseInt(pic) + ' มาเล่น Cannon Jump ด้วยกันนะ ><',
                     href: 'https://game.helloworld.itbangmod.in.th/',
                 }, function(response){
                     swal("แชร์เรียบร้อยแล้ว!", "อย่าลืมมาสมัคร HelloWorld #Alpaca กันนะ!", "ตกลง");
