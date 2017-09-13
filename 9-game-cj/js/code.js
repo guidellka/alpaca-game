@@ -921,15 +921,18 @@ function updateGameplay() {
                 FB.ui({
                     method: 'share',
                     display: 'popup',
+                    hashtag: '#HelloAlpaca',
                     quote: 'เราได้คะแนน ' + parseInt(Math.ceil(pic)) + ' มาเล่น Cannon Jump ด้วยกันนะ ><',
                     href: 'https://game.helloworld.itbangmod.in.th/',
                 }, function(response){
-                    swal({
-                        title: 'แชร์เรียบร้อยแล้ว!',
-                        text: 'อย่าลืมมาสมัคร HelloWorld #Alpaca กันนะ!',
-                        icon: 'success',
-                        button: 'OK',
-                    });
+                    if (response) {
+                        swal({
+                            title: 'แชร์เรียบร้อยแล้ว!',
+                            text: 'อย่าลืมมาสมัคร HelloWorld #Alpaca กันนะ!',
+                            icon: 'success',
+                            button: 'OK',
+                        });
+                    }
                 });
                 //pic
             }, this, 0, 0, 0);
