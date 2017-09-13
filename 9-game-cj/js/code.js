@@ -33,12 +33,12 @@ function preloadHowToPlay(){
 }
 
 function preloadCredit(){
+    game.load.spritesheet('menuButton', '9-game-cj/images/menuBtu.png', 796/2 , 92);
     game.load.spritesheet('mute', '9-game-cj/images/mute.png', 450, 447);
+    game.load.image('resultBG','9-game-cj/images/resultBG.png');
 }
 
 function preloadGameplay() {
-    game.load.image('bullet', '9-game-cj/images/bullet.png');
-    game.load.image('enemy_ship', '9-game-cj/images/enemyship.png');
     game.load.image('background3', '9-game-cj/images/BgState3.png');
     game.load.image('background1', '9-game-cj/images/BgState1.png');
     game.load.image('background2', '9-game-cj/images/BgState2.png');
@@ -59,6 +59,7 @@ function preloadGameplay() {
     game.load.image('stopwatchBackground','9-game-cj/images/stopwatchBackground.png');
     game.load.image('timestopBG','9-game-cj/images/timestopBG.png');
     game.load.image('resultBG','9-game-cj/images/resultBG.png');
+    game.load.image('shareBtn','9-game-cj/images/share.png');
 
     game.load.spritesheet('ship', '9-game-cj/images/wip.png',3600/3,2010,3);
     game.load.spritesheet('up', '9-game-cj/images/up2.png', 45, 45, 8);
@@ -66,11 +67,11 @@ function preloadGameplay() {
     game.load.spritesheet('right', '9-game-cj/images/right2.png', 45, 45, 8);
     game.load.spritesheet('left', '9-game-cj/images/left2.png', 45, 45, 8);
     game.load.spritesheet('laser', '9-game-cj/images/biglaser.png');
-    game.load.spritesheet('spacebarBlock', '9-game-cj/images/dontpush.png');
+    game.load.spritesheet('spacebarBlock', '9-game-cj/images/dontpush.png', 234/2 , 120 , 2);
     game.load.spritesheet('numberText', '9-game-cj/images/numberText.png', 450 / 12, 50, 12);
     game.load.spritesheet('restartBtn', '9-game-cj/images/restartBtn.png', 796/2, 92);
     game.load.spritesheet('smoke', '9-game-cj/images/smoke.png',200,450,5);
-    game.load.spritesheet('grade', '9-game-cj/images/grade.png',1800/6,220,6);
+    game.load.spritesheet('grade', '9-game-cj/images/grade.png',2142/6,446,6);
     game.load.spritesheet('AttentionSpacebar', '9-game-cj/images/spacebar.png',796/2, 92);
 
     /////metarial/////
@@ -126,7 +127,7 @@ var floorBack;
 var bg;
 var bgSpeed;
 var perfectSpeed = 0.5;
-var score;
+var pic;
 var scoreShow;
 var scoreDigit1;
 var scoreDigit2;
@@ -180,6 +181,7 @@ var countPerfect;
 var countGreat;
 var countCool;
 var countBad;
+var shareBtn;
 /////////sound variable//////////
 var timeStopSound;
 var BGMStage1;
@@ -213,18 +215,24 @@ function createMenu() {
     game.stage.disableVisibilityChange = true;
 
     game.add.image(0, 0, 'backgroundMenu');
-    startButton = game.add.button(game.world.width*(3.5/5), game.world.height*(2.5/5), 'startButton', toHowToPlay, this, 0, 1, 0);
+    startButton = game.add.button(game.world.width*(3.5/5)+30, game.world.height*(4/5), 'startButton', toHowToPlay, this, 0, 1, 0);
     startButton.anchor.set(0.5);
-    startButton.scale.setTo(0.5);
-    creditButton = game.add.button(game.world.width*(3.5/5), game.world.height*(4/5), 'creditButton', toCredit, this, 0, 1, 0);
+    startButton.scale.setTo(0.7);
+    creditButton = game.add.button(game.world.width*(3.5/5)+30, game.world.height*(4.5/5), 'creditButton', toCredit, this, 0, 1, 0);
     creditButton.anchor.set(0.5);
-    creditButton.scale.setTo(0.5);
-    BGMMenu = game.add.audio('BGMMenu');
-    BGMMenu.volume = 0.4;
-    BGMMenu.loopFull();
-    mute = game.add.button(game.world.width*(97/100), game.world.height*(96/100), 'mute', muteSounds, this);
+    creditButton.scale.setTo(0.37);
+    if(BGMMenu == null){
+        BGMMenu = game.add.audio('BGMMenu');
+        BGMMenu.volume = 0.4;
+        BGMMenu.loopFull();
+    }
+    mute = game.add.button(game.world.width*(97/100), game.world.height*(4/100), 'mute', muteSounds, this);
     mute.scale.setTo(0.08, 0.08);
     mute.anchor.set(0.5);
+    if (isSound)
+        mute.frame = 0;
+    else
+        mute.frame = 1;
 }
 
 function createHowToPlay() {
@@ -233,9 +241,10 @@ function createHowToPlay() {
     createPage1();
     startBtnSound = game.add.audio('startSound');
     startBtnSound.volume = 0.6;
-    mute = game.add.button(game.world.width*(97/100), game.world.height*(96/100), 'mute', muteSounds, this);
+    mute = game.add.button(game.world.width*(97/100), game.world.height*(4/100), 'mute', muteSounds, this);
     mute.scale.setTo(0.08, 0.08);
     mute.anchor.set(0.5);
+    mute.bringToTop();
     if (isSound)
         mute.frame = 0;
     else
@@ -245,7 +254,7 @@ function createHowToPlay() {
 function createPage1(){
     state = game.add.image(0, 0, 'how1');
     state.scale.setTo(0.24);
-    textNext = game.add.text(game.world.width*(0.85), game.world.height*(0.98), 'Next', { font: '20px'});
+    textNext = game.add.text(game.world.width*(0.91), game.world.height*(0.918), 'Next', { font: '25px'});
     textNext.anchor.set(0.5);
     textNext.inputEnabled = true;
     textNext.input.enableDrag();
@@ -253,13 +262,22 @@ function createPage1(){
         state.destroy();
         textNext.destroy();
         createPage2();
+        mute.bringToTop();
+    }, this);
+    textNext.events.onInputOver.add(function(){
+        textNext.addColor('#FDC66D',0);
+        textNext.fontSize = 30;
+    }, this);
+    textNext.events.onInputOut.add(function(){
+        textNext.addColor('#000',0);
+        textNext.fontSize = 25;
     }, this);
 }
 
 function createPage2(){
     state = game.add.image(0, 0, 'how2');
     state.scale.setTo(0.24);
-    textPre = game.add.text(game.world.width*(0.15), game.world.height*(0.98), 'Pre', { font: '20px'});
+    textPre = game.add.text(game.world.width*(0.09), game.world.height*(0.918), 'Pre', { font: '25px'});
     textPre.inputEnabled = true;
     textPre.anchor.set(0.5);
     textPre.input.enableDrag();
@@ -268,8 +286,18 @@ function createPage2(){
         textPre.destroy();
         textNext.destroy();
         createPage1();
+        mute.bringToTop();
     }, this);
-    textNext = game.add.text(game.world.width*(0.85), game.world.height*(0.98), 'Next', { font: '20px'});
+    textPre.events.onInputOver.add(function(){
+        textPre.addColor('#FDC66D',0);
+        textPre.fontSize = 30;
+    }, this);
+    textPre.events.onInputOut.add(function(){
+        textPre.addColor('#000',0);
+        textPre.fontSize = 25;
+    }, this);
+
+    textNext = game.add.text(game.world.width*(0.91), game.world.height*(0.918), 'Next', { font: '25px'});
     textNext.inputEnabled = true;
     textNext.anchor.set(0.5);
     textNext.input.enableDrag();
@@ -277,13 +305,22 @@ function createPage2(){
         state.destroy();
         textNext.destroy();
         createPage3();
+        mute.bringToTop();
+    }, this);
+    textNext.events.onInputOver.add(function(){
+        textNext.addColor('#FDC66D',0);
+        textNext.fontSize = 30;
+    }, this);
+    textNext.events.onInputOut.add(function(){
+        textNext.addColor('#000',0);
+        textNext.fontSize = 25;
     }, this);
 }
 
 function createPage3(){
     state = game.add.image(0, 0, 'how3');
     state.scale.setTo(0.24);
-    textPre = game.add.text(game.world.width*(0.15), game.world.height*(0.98), 'Pre', { font: '20px'});
+    textPre = game.add.text(game.world.width*(0.09), game.world.height*(0.918), 'Pre', { font: '25px'});
     textPre.anchor.set(0.5);
     textPre.inputEnabled = true;
     textPre.input.enableDrag();
@@ -292,8 +329,17 @@ function createPage3(){
         textPre.destroy();
         textNext.destroy();
         createPage2();
+        mute.bringToTop();
     }, this);
-    textNext = game.add.text(game.world.width*(0.85), game.world.height*(0.98), 'Start!!', { font: '20px'});
+    textPre.events.onInputOver.add(function(){
+        textPre.addColor('#FDC66D',0);
+        textPre.fontSize = 30;
+    }, this);
+    textPre.events.onInputOut.add(function(){
+        textPre.addColor('#000',0);
+        textPre.fontSize = 25;
+    }, this);
+    textNext = game.add.text(game.world.width*(0.91), game.world.height*(0.918), 'Start!!', { font: '25px'});
     textNext.inputEnabled = true;
     textNext.anchor.set(0.5);
     textNext.input.enableDrag();
@@ -301,12 +347,42 @@ function createPage3(){
         state.destroy();
         textNext.destroy();
         toGameplay();
+        mute.bringToTop();
+    }, this);
+    textNext.events.onInputOver.add(function(){
+        textNext.addColor('#FDC66D',0);
+        textNext.fontSize = 30;
+    }, this);
+    textNext.events.onInputOut.add(function(){
+        textNext.addColor('#000',0);
+        textNext.fontSize = 25;
     }, this);
 }
 function createCredit(){
-    mute = game.add.button(game.world.width*(97/100), game.world.height*(96/100), 'mute', muteSounds, this);
+    game.add.image(0, 0, 'backgroundMenu');
+    resultBG = game.add.sprite(game.world.width/2,game.world.height/2.1,'resultBG');
+    resultBG.anchor.set(0.5);
+    resultBG.scale.setTo(1);
+    game.add.text(game.world.width*0.2, game.world.height*0.2, 'Credit\n', {font: '30px super', fill: '#EEE'});
+    game.add.text(game.world.width*0.25, game.world.height*0.2+40, "Sounds\n", {font: '25px super', fill: '#EEE'});
+    game.add.text(game.world.width*0.30, game.world.height*0.2+75, 'Audio Library - No Copyright Music\n'+
+    'WoWMusicGuru\n'+
+    'Theapplegeek\n', {font: '20px super', fill: '#EEE'});
+    game.add.text(game.world.width*0.25, game.world.height*0.2+165,'Images\n', {font: '25px super', fill: '#EEE'});
+    game.add.text(game.world.width*0.30, game.world.height*0.2+195,'www.freepik.com', {font: '20px super', fill: '#EEE'});
+    menuButton = game.add.button(game.world.width*0.15, game.world.height*0.95,'menuButton', function(){
+        game.state.start('menu');
+    }, this, 0, 1, 0);
+    menuButton.scale.setTo(0.5);
+    menuButton.anchor.set(0.5);
+    mute = game.add.button(game.world.width*(97/100), game.world.height*(4/100), 'mute', muteSounds, this);
     mute.scale.setTo(0.08, 0.08);
     mute.anchor.set(0.5);
+    mute.bringToTop();
+    if (isSound)
+        mute.frame = 0;
+    else
+        mute.frame = 1;
 }
 
 function loadStart() {
@@ -424,10 +500,11 @@ function createGameplay() {
     
     specialGuageIsSpawned = false;
     isSpacebarPressed = false;
-    spacebarBlock = this.add.sprite(game.world.width * (3 / 5) - 40, game.world.height * (3 / 5) - 20, 'spacebarBlock');
-    spacebarBlock.scale.setTo(0.7, 0.7);
+    spacebarBlock = this.add.sprite(game.world.width * (3 / 5) - 25, game.world.height * (3 / 5) - 25, 'spacebarBlock');
+    spacebarBlock.scale.setTo(0.5, 0.5);
     spacebarBlock.kill();
     spacebarBlockSpawnedLastTime = true;
+    spacebarBlock.animations.add('active',[0,1],10,true);
     specialGuage = this.add.sprite(game.world.width * (1 / 5), game.world.height * (0.9 / 5), 'guage');
     specialGuage.anchor.set(0.5,0);
     specialGuageSeal = this.add.sprite(game.world.width * (1 / 5)-7  ,specialGuage.y+specialGuage.height*0.72, 'guageSeal');
@@ -461,7 +538,7 @@ function createGameplay() {
     stopTimeGroup.physicsBodyType = Phaser.Physics.ARCADE;
     timestopBG = game.add.image(0 , 0 , 'timestopBG');
     timestopBG.alpha = 0;
-
+    
 
 
     
@@ -500,14 +577,14 @@ function createGameplay() {
     BGMStage1.play();
     //wippo.events.onOutOfBounds.add(gameEnd(), this);
 
-    scoreShow = score = 0;
+    scoreShow = pic = 0;
     scoreDigit6 = game.add.sprite(0, 0, 'numberText');
     scoreDigit5 = game.add.sprite(scoreDigit6.x + scoreDigit6.width, 0, 'numberText');
     scoreDigit4 = game.add.sprite(scoreDigit5.x + scoreDigit5.width, 0, 'numberText');
     scoreDigit3 = game.add.sprite(scoreDigit4.x + scoreDigit4.width, 0, 'numberText');
     scoreDigit2 = game.add.sprite(scoreDigit3.x + scoreDigit3.width, 0, 'numberText');
     scoreDigit1 = game.add.sprite(scoreDigit2.x + scoreDigit2.width, 0, 'numberText');
-    scoreDigit1.frame = 0;
+    scoreDigit1.frame = 11;
     scoreDigit2.frame = 11;
     scoreDigit3.frame = 11;
     scoreDigit4.frame = 11;
@@ -516,24 +593,24 @@ function createGameplay() {
 
     ////result/////
     resultComponent = game.add.group();
-    resultBG = game.add.sprite(game.world.width/2,game.world.height/2.1,'resultBG');
+    resultBG = game.add.sprite(game.world.width/2,game.world.height/2,'resultBG');
     resultBG.anchor.set(0.5);
-    resultGrade = game.add.sprite(resultBG.x*0.8, resultBG.y,'grade');
+    resultGrade = game.add.sprite(resultBG.x*1.3, resultBG.y*0.8-40,'grade');
     resultGrade.anchor.set(0.5);
-    perfectText = game.add.text(resultBG.x*1.25, resultBG.y*0.7, "Perfect : ", { font: "18px Thaisans Neue for Web", fill: "#FFFFFF" });
-    greatText = game.add.text(resultBG.x*1.25, perfectText.y+perfectText.height*2, "Great   : ", { font: "18px Thaisans Neue for Web", fill: "#FFFFFF" });
-    coolText = game.add.text(resultBG.x*1.25, greatText.y+greatText.height*2, "Cool    : ", { font: "18px Thaisans Neue for Web", fill: "#FFFFFF" });
-    badText = game.add.text(resultBG.x*1.25, coolText.y+coolText.height*2, "Bad     : ", { font: "18px Thaisans Neue for Web", fill: "#FFFFFF" });
-    tipText = game.add.text(resultBG.x, resultBG.y*1.8, "Tips : You died. eiei", { font: "32px Thaisans Neue for Web", fill: "#FF0000" });
+    perfectText = game.add.text(resultBG.x*0.45, resultBG.y*0.6, "Perfect : ", { font: "24px Merriweather", fill: "#FFFFFF" });
+    greatText = game.add.text(resultBG.x*0.45, perfectText.y+perfectText.height*1.2, "Great   : ", { font: "24px Merriweather", fill: "#FFFFFF" });
+    coolText = game.add.text(resultBG.x*0.45, greatText.y+greatText.height*1.2, "Cool    : ", { font: "24px Merriweather", fill: "#FFFFFF" });
+    badText = game.add.text(resultBG.x*0.45, coolText.y+coolText.height*1.2, "Bad     : ", { font: "24px Merriweather", fill: "#FFFFFF" });
+    tipText = game.add.text(resultBG.x, resultBG.y*1.8-70, "Tips : You died. eiei", { font: "32px super", fill: "#FF6633" });
     tipText.anchor.set(0.5);
     tipsMessage = ['Tips : เค้าเป็นอัลปาก้านะ ไม่ใช่แกะ :3','Tips : พยายามเข้านะ!','Tips : ระวังนะ! ปุ่มสีม่วงอาจเปลี่ยนปุ่มด้านหลังได้'
     ,'Tips : อย่าลืมนะ ถ้าเจอปุ่มสีแดงให้กดด้านตรงข้าม','Tips : อย่ากระพริบตาหล่ะ อัลปาก้าจะมาแทนปุ่มสีน้ำเงิน','Tips : อย่ายอมแพ้นะ ปุ่ม Enter ช่วยหยุดเวลาได้'
-    ,'ระวังปุ่มพังซะก่อนนะ :)','มีความพยายาม... แต่ก็ยังอ่อนหัด','แ บ ะ ะ ะ ะ ~','แ ม๊ ะ ะ ะ ~'];
+    ,'Tips : ระวังปุ่มพังซะก่อนนะ :)','Tips : มีความพยายาม... แต่ก็ยังอ่อนหัด','Tips : แ บ ะ ะ ะ ะ ~','Tips : แ ม๊ ะ ะ ะ ~'];
     countPerfect = 0;
     countGreat = 0;
     countCool = 0;
     countBad = 0;
-    
+
     resultComponent.add(resultBG);
     resultComponent.add(resultGrade);
     resultComponent.add(perfectText);
@@ -550,7 +627,7 @@ function createGameplay() {
     resultComponent.add(scoreDigit5);
     resultComponent.add(scoreDigit6);
 
-    mute = game.add.button(game.world.width*(97/100), game.world.height*(96/100), 'mute', muteSounds, this);
+    mute = game.add.button(game.world.width*(97/100), game.world.height*(4/100), 'mute', muteSounds, this);
     mute.scale.setTo(0.08, 0.08);
     mute.anchor.set(0.5);
     if (isSound)
@@ -587,10 +664,10 @@ function updateGameplay() {
                 }
             } else if (spaceButton.isDown && game.time.now > spaceKeyDownTimer) {
                 isSpacebarPressed = true;
+                spaceKeyDownTimer = game.time.now + 1400;
                 checkAccuracy();
                 clearWave();
                 spacebarBlockSpawnedLastTime = false;
-                spaceKeyDownTimer = game.time.now + 1400;
                 if (bg.tilePosition.y >= 1400 && stateHandle<3 && gamemode=="ingame") {
                     bgSpeed=perfectSpeed*30/100;
                     gamemode = "feverTime";
@@ -615,6 +692,7 @@ function updateGameplay() {
 
                     }
                     summonWave();
+                    spacebarBlock.bringToTop();
                     isSpacebarPressed = false;
                 }
                 checker.reset(progressBar.x, progressBar.y);
@@ -660,7 +738,7 @@ function updateGameplay() {
             }
 
             if (specialGuageSeal.y < specialGuage.y*1.3 && specialGuage != null) {
-                score += 500;
+                pic += 500;
                 specialGuage.kill();
                 specialGuageSeal.kill();
                 gamemode = "changingState";
@@ -771,22 +849,22 @@ function updateGameplay() {
             isfirstOver = false;
             var digitLength = 6;
             for(;digitLength>0;digitLength--){
-                if(Math.floor(score/(Math.pow(10,digitLength-1)))!=0){
+                if(Math.floor(pic/(Math.pow(10,digitLength-1)))!=0){
                     break;
                 }
             }
             switch (digitLength) {
                 case 6:
-                scoreDigit3.reset(resultBG.x,resultBG.y/2.8);
-                scoreDigit4.reset(resultBG.x - scoreDigit3.width,scoreDigit3.y);
+                scoreDigit3.reset(resultBG.x - resultBG.width/6-9,resultBG.y/2.8);
+                scoreDigit4.reset(resultBG.x - scoreDigit3.width-resultBG.width/6-9,scoreDigit3.y);
                 scoreDigit5.reset(scoreDigit4.x - scoreDigit4.width,scoreDigit4.y);
                 scoreDigit6.reset(scoreDigit5.x - scoreDigit5.width,scoreDigit4.y);
                 scoreDigit2.reset(scoreDigit3.x + scoreDigit3.width,scoreDigit4.y);
                 scoreDigit1.reset(scoreDigit2.x + scoreDigit2.width,scoreDigit4.y);
-                
+
                 break;
                 case 5:
-                scoreDigit3.reset(resultBG.x - scoreDigit3.width/2,resultBG.y/2.8);
+                scoreDigit3.reset(resultBG.x - scoreDigit3.width/2 - resultBG.width/6-9,resultBG.y/2.8);
                 scoreDigit4.reset(scoreDigit3.x - scoreDigit3.width,scoreDigit3.y);
                 scoreDigit5.reset(scoreDigit4.x - scoreDigit4.width,scoreDigit4.y);
                 scoreDigit6.kill();
@@ -794,7 +872,7 @@ function updateGameplay() {
                 scoreDigit1.reset(scoreDigit2.x + scoreDigit2.width,scoreDigit4.y);
                 break;
                 case 4:
-                scoreDigit3.reset(resultBG.x - scoreDigit3.width,resultBG.y/2.8);
+                scoreDigit3.reset(resultBG.x - scoreDigit3.width - resultBG.width/6-9,resultBG.y/2.8);
                 scoreDigit4.reset(scoreDigit3.x - scoreDigit3.width,scoreDigit3.y);
                 scoreDigit5.kill();
                 scoreDigit6.kill();
@@ -802,7 +880,7 @@ function updateGameplay() {
                 scoreDigit1.reset(scoreDigit2.x + scoreDigit2.width,scoreDigit4.y);
                 break;
                 case 3:
-                scoreDigit2.reset(resultBG.x - scoreDigit2.width/2,resultBG.y/2.8);
+                scoreDigit2.reset(resultBG.x - scoreDigit2.width/2 - resultBG.width/6-9,resultBG.y/2.8);
                 scoreDigit4.kill();
                 scoreDigit5.kill();
                 scoreDigit6.kill();
@@ -814,7 +892,7 @@ function updateGameplay() {
                 scoreDigit4.kill();
                 scoreDigit5.kill();
                 scoreDigit6.kill();
-                scoreDigit2.reset(resultBG.x - scoreDigit2.width,resultBG.y/2.8);
+                scoreDigit2.reset(resultBG.x - scoreDigit2.width - resultBG.width/6-9,resultBG.y/2.8);
                 scoreDigit1.reset(scoreDigit2.x + scoreDigit2.width,scoreDigit2.y);
                 break;
                 case 1:
@@ -824,45 +902,65 @@ function updateGameplay() {
                 scoreDigit4.kill();
                 scoreDigit3.kill();
                 scoreDigit2.kill();
-                scoreDigit1.reset(resultBG.x - scoreDigit1.width/2,resultBG.y/2.8);
+                scoreDigit1.reset(resultBG.x - scoreDigit1.width/2 - resultBG.width/6-9,resultBG.y/2.8);
+                if(pic==0){
+                  scoreDigit1.frame = 0;
+                }
                 break;
-            
+
             }
-            buttonRestart = game.add.button(resultBG.x, resultBG.y*1.55, 'restartBtn', function(){
+            buttonRestart = game.add.button(resultBG.x-60, resultBG.y*1.55-75, 'restartBtn', function(){
                 game.state.restart(true,false);
                 BGMResult.stop();
                 BGMStage1.stop();
                 BGMStage2.stop();
                 BGMStage3.stop();
             }, this, 0, 1, 0);
-            buttonRestart.scale.setTo(0.5);
-            perfectText.setText('Perfect : '+countPerfect);
-            greatText.setText('Great   : '+countGreat);
-            coolText.setText('Cool    : '+countCool);
-            badText.setText('Bad     : '+countBad);
+
+            shareBtn = game.add.button(resultBG.x-202, resultBG.y*1.55-77, 'shareBtn', function() {
+                FB.ui({
+                    method: 'share',
+                    display: 'popup',
+                    href: 'https://game.helloworld.itbangmod.in.th/',
+                }, function(response){});
+                //pic
+            }, this, 0, 0, 0);
+            shareBtn.scale.setTo(0.25);
+            shareBtn.anchor.set(0.5);
+
+            perfectText.setText('Perfect   \u2006:     '+countPerfect);
+            greatText.setText('Great      :     '+countGreat);
+            coolText.setText('Cool        :     '+countCool);
+            badText.setText('Bad         :     '+countBad);
             tipText.setText(tipsMessage[game.rnd.integerInRange(0, 9)]);
-            buttonRestart.scale.setTo(0.5, 0.5);
+            tipText.stroke = '#222';
+            tipText.strokeThickness = 2;
+            buttonRestart.scale.setTo(0.40);
             buttonRestart.anchor.set(0.5);
             buttonRestart.alpha = 0;
-            if(score >= 10000){
-                resultGrade.frame = 0;
-            }else if(score >= 7000){
-                resultGrade.frame = 1;
-            }else if(score >= 4500){
-                resultGrade.frame = 2;
-            }else if(score >= 2000){
-                resultGrade.frame = 3;
-            }else if(score >= 500){
-                resultGrade.frame = 4;
-            }else{
+            if(pic >= 10000){
                 resultGrade.frame = 5;
+            }else if(pic >= 7000){
+                resultGrade.frame = 4;
+            }else if(pic >= 4500){
+                resultGrade.frame = 3;
+            }else if(pic >= 2000){
+                resultGrade.frame = 2;
+            }else if(pic >= 500){
+                resultGrade.frame = 1;
+            }else{
+                resultGrade.frame = 0;
             }
-
+            
         }
         if(buttonRestart.alpha<1){
             buttonRestart.alpha += 0.01;
             resultComponent.setAll('alpha',buttonRestart.alpha);
         }
+        if (spaceButton.isDown && game.time.now > spaceKeyDownTimer){
+            game.state.restart(true,false);
+        }
+        
 
     }
 
@@ -959,6 +1057,9 @@ function stoptime() {
     if(AttentionSpacebar.alive){
         AttentionSpacebar.animations.stop();
     }
+    if(spacebarBlock.alive){
+        spacebarBlock.animations.stop();
+    }
     sharkGroup.setAll('body.velocity.x', 0, false, false);
     sharkGroup.setAll('body.velocity.y', 0, false, false);
     sharkGroup.setAll('body.gravity.y', 0, false, false);
@@ -1001,6 +1102,9 @@ function cancelCountdownTimer(timerName) {
         }
         if(AttentionSpacebar.alive){
             AttentionSpacebar.play('active');
+        }
+        if(spacebarBlock.alive){
+            spacebarBlock.animations.play('active');
         }
         sharkGroup.setAll('body.gravity.y', 380, false, false);
         sharkGroup.setAll('animations.paused', false, false);
@@ -1107,7 +1211,7 @@ function checkAccuracy() {
         if(difficulty < 8){
             difficulty++;
         }
-        score += 25*(numOfArrow*1.5)*(1+(perfectStack/10));
+        pic += 25*(numOfArrow*1.5)*(1+(perfectStack/10));
         perfectSound.play();
         result = true;
         //////////animation wippo
@@ -1120,7 +1224,7 @@ function checkAccuracy() {
         }, this);
         countGreat++;
         bgSpeed = perfectSpeed*90/100;
-        score += 20*(numOfArrow*1.5);
+        pic += 20*(numOfArrow*1.5);
         perfectStack = 0;
         greatSound.play();
         result = true;
@@ -1133,7 +1237,7 @@ function checkAccuracy() {
         }, this);
         countCool++;
         bgSpeed = perfectSpeed*80/100;
-        score += 15*(numOfArrow*1.5);
+        pic += 15*(numOfArrow*1.5);
         if(difficulty > 1){
             difficulty--;
         }
@@ -1149,7 +1253,7 @@ function checkAccuracy() {
         }, this);
         countBad++;
         bgSpeed = perfectSpeed*70/100;
-        score += 10*(numOfArrow*1.5);
+        pic += 10*(numOfArrow*1.5);
         if(difficulty > 3){
             difficulty -= 3;
         }
@@ -1175,22 +1279,22 @@ function checkAccuracy() {
 }
 
 function updateScore(){
-    if(score>scoreShow){
-        if(score>scoreShow+2){
+    if(pic>scoreShow){
+        if(pic>scoreShow+2){
             scoreShow+=2;
         }else{
             scoreShow++;
         }
         scoreDigit1.frame = scoreShow%10;
-        if(score>9){
+        if(pic>9){
             scoreDigit2.frame = Math.floor(scoreShow / 10)%10;
-            if(score>99){
+            if(pic>99){
                 scoreDigit3.frame = Math.floor(scoreShow / 100)%10;
-                if(score>999){
+                if(pic>999){
                     scoreDigit4.frame = Math.floor(scoreShow / 1000)%10;
-                    if(score>9999){
+                    if(pic>9999){
                         scoreDigit5.frame = Math.floor(scoreShow / 10000)%10;
-                        if(score>99999){
+                        if(pic>99999){
                             scoreDigit6.frame = Math.floor(scoreShow / 100000)%10;
                         }
                     }
@@ -1328,6 +1432,7 @@ function summonWave() {
     if (randObstacle == 2 && !spacebarBlockSpawnedLastTime) {
         spacebarBlock.revive();
         spacebarBlockSpawnedLastTime = true;
+        spacebarBlock.animations.play('active');
     }
     if (length % 2 == 0) {
         x = length / 2;
