@@ -924,7 +924,6 @@ function updateGameplay() {
                     quote: 'เราได้คะแนน ' + pic + ' มาเล่น Cannone Jump ด้วยกันนะ ><',
                     href: 'https://game.helloworld.itbangmod.in.th/',
                 }, function(response){
-                    console.log(response)
                     swal("แชร์เรียบร้อยแล้ว!", "อย่าลืมมาสมัคร HelloWorld #Alpaca กันนะ!", "ตกลง");
                 });
                 //pic
