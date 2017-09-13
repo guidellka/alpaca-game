@@ -922,7 +922,7 @@ function updateGameplay() {
                     method: 'share',
                     display: 'popup',
                     hashtag: '#HelloAlpaca',
-                    quote: 'เราได้คะแนน ' + parseInt(Math.ceil(pic)) + ' มาเล่น Cannon Jump ด้วยกันนะ ><',
+                    quote: 'เราได้คะแนน ' + parseInt(Math.ceil(pic)) + ' มาเล่น Cannon Jump ด้วยกันนะ >< #HelloWorld #Alpaca #CannonJump',
                     href: 'https://game.helloworld.itbangmod.in.th/',
                 }, function(response){
                     if (response) {
