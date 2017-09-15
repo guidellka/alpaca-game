@@ -29,7 +29,7 @@ function preloadHowToPlay() {
     game.load.image('how2', '9-game-cj/images/howtop2.png');
     game.load.image('how3', '9-game-cj/images/howtop3.png');
     game.load.spritesheet('mute', '9-game-cj/images/mute.png', 450, 447);
-    game.load.audio('start9-game-cj/sound', '9-game-cj/sound/Start.mp3');
+    game.load.audio('startSound', '9-game-cj/sound/Start.mp3');
 }
 
 function preloadCredit() {
@@ -182,23 +182,23 @@ var countGreat;
 var countCool;
 var countBad;
 var shareBtn;
-/////////9-game-cj/sound variable//////////
-var timeStop9-game-cj/sound;
+/////////Sound variable//////////
+var timeStopSound;
 var BGMStage1;
 var BGMStage2;
 var BGMStage3;
-var fall9-game-cj/sound;
+var fallSound;
 var BGMMenu;
 var BGMResult;
-var wrongButton9-game-cj/sound;
-var perfect9-game-cj/sound;
-var great9-game-cj/sound;
-var cool9-game-cj/sound;
-var bad9-game-cj/sound;
+var wrongButtonSound;
+var perfectSound;
+var greatSound;
+var coolSound;
+var badSound;
 var getTimeStopPoint;
 var cannonShoot;
-var passStage9-game-cj/sound;
-var startBtn9-game-cj/sound;
+var passStageSound;
+var startBtnSound;
 
 /////////material variable///////
 var sharkGroup;
@@ -226,7 +226,7 @@ function createMenu() {
         BGMMenu.volume = 0.4;
         BGMMenu.loopFull();
     }
-    mute = game.add.button(game.world.width * (97 / 100), game.world.height * (4 / 100), 'mute', mute9-game-cj/sounds, this);
+    mute = game.add.button(game.world.width * (97 / 100), game.world.height * (4 / 100), 'mute', muteSounds, this);
     mute.scale.setTo(0.08, 0.08);
     mute.anchor.set(0.5);
     if (isSound)
@@ -239,9 +239,9 @@ function createHowToPlay() {
     game.stage.disableVisibilityChange = true;
 
     createPage1();
-    startBtn9-game-cj/sound = game.add.audio('start9-game-cj/sound');
-    startBtn9-game-cj/sound.volume = 0.6;
-    mute = game.add.button(game.world.width * (97 / 100), game.world.height * (4 / 100), 'mute', mute9-game-cj/sounds, this);
+    startBtnSound = game.add.audio('startSound');
+    startBtnSound.volume = 0.6;
+    mute = game.add.button(game.world.width * (97 / 100), game.world.height * (4 / 100), 'mute', muteSounds, this);
     mute.scale.setTo(0.08, 0.08);
     mute.anchor.set(0.5);
     mute.bringToTop();
@@ -364,7 +364,7 @@ function createCredit() {
     resultBG.anchor.set(0.5);
     resultBG.scale.setTo(1);
     game.add.text(game.world.width * 0.2, game.world.height * 0.2, 'Credit\n', { font: '30px super', fill: '#EEE' });
-    game.add.text(game.world.width * 0.25, game.world.height * 0.2 + 40, "9-game-cj/sounds\n", { font: '25px super', fill: '#EEE' });
+    game.add.text(game.world.width * 0.25, game.world.height * 0.2 + 40, "Sounds\n", { font: '25px super', fill: '#EEE' });
     game.add.text(game.world.width * 0.30, game.world.height * 0.2 + 75, 'Audio Library - No Copyright Music\n' +
         'WoWMusicGuru\n' +
         'Theapplegeek\n', { font: '20px super', fill: '#EEE' });
@@ -375,7 +375,7 @@ function createCredit() {
     }, this, 0, 1, 0);
     menuButton.scale.setTo(0.5);
     menuButton.anchor.set(0.5);
-    mute = game.add.button(game.world.width * (97 / 100), game.world.height * (4 / 100), 'mute', mute9-game-cj/sounds, this);
+    mute = game.add.button(game.world.width * (97 / 100), game.world.height * (4 / 100), 'mute', muteSounds, this);
     mute.scale.setTo(0.08, 0.08);
     mute.anchor.set(0.5);
     mute.bringToTop();
@@ -551,29 +551,29 @@ function createGameplay() {
 
     ////9-game-cj/sound////
     BGMMenu.stop();
-    timeStop9-game-cj/sound = game.add.audio('timestop');
+    timeStopSound = game.add.audio('timestop');
     BGMStage1 = game.add.audio('BGMStage1');
     BGMStage2 = game.add.audio('BGMStage2');
     BGMStage3 = game.add.audio('BGMStage3');
-    fall9-game-cj/sound = game.add.audio('fall');
+    fallSound = game.add.audio('fall');
     BGMMenu = game.add.audio('BGMMenu');
     BGMResult = game.add.audio('death');
-    wrongButton9-game-cj/sound = game.add.audio('wrongButton');
-    wrongButton9-game-cj/sound.volume = 0.6;
-    perfect9-game-cj/sound = game.add.audio('perfect');
-    great9-game-cj/sound = game.add.audio('great');
-    cool9-game-cj/sound = game.add.audio('cool');
-    bad9-game-cj/sound = game.add.audio('bad');
-    perfect9-game-cj/sound.volume = 0.6;
-    great9-game-cj/sound.volume = 0.6;
-    cool9-game-cj/sound.volume = 1;
-    bad9-game-cj/sound.volume = 1;
+    wrongButtonSound = game.add.audio('wrongButton');
+    wrongButtonSound.volume = 0.6;
+    perfectSound = game.add.audio('perfect');
+    greatSound = game.add.audio('great');
+    coolSound = game.add.audio('cool');
+    badSound = game.add.audio('bad');
+    perfectSound.volume = 0.6;
+    greatSound.volume = 0.6;
+    coolSound.volume = 1;
+    badSound.volume = 1;
     getTimeStopPoint = game.add.audio('getSkillPoint');
     getTimeStopPoint.volume = 2.5;
     cannonShoot = game.add.audio('cannonShoot');
     cannonShoot.volume = 0.6;
-    passStage9-game-cj/sound = game.add.audio('passStage');
-    passStage9-game-cj/sound.volume = 0.6;
+    passStageSound = game.add.audio('passStage');
+    passStageSound.volume = 0.6;
     BGMStage1.play();
     //wippo.events.onOutOfBounds.add(gameEnd(), this);
 
@@ -627,7 +627,7 @@ function createGameplay() {
     resultComponent.add(scoreDigit5);
     resultComponent.add(scoreDigit6);
 
-    mute = game.add.button(game.world.width * (97 / 100), game.world.height * (4 / 100), 'mute', mute9-game-cj/sounds, this);
+    mute = game.add.button(game.world.width * (97 / 100), game.world.height * (4 / 100), 'mute', muteSounds, this);
     mute.scale.setTo(0.08, 0.08);
     mute.anchor.set(0.5);
     if (isSound)
@@ -837,7 +837,7 @@ function updateGameplay() {
                     stateHandle++;
                 }
             }, this);
-            passStage9-game-cj/sound.play();
+            passStageSound.play();
         }
     } else if (gamemode == "gameover") {
         if (wippo.alive) {
@@ -980,14 +980,14 @@ function updateGameplay() {
 
 }
 ////mute
-function mute9-game-cj/sounds() {
+function muteSounds() {
     isSound = !isSound;
     if (!isSound) {
-        game.9-game-cj/sound.mute = true;
+        game.Sound.mute = true;
         mute.frame = 1;
     } else {
         mute.frame = 0;
-        game.9-game-cj/sound.mute = false;
+        game.Sound.mute = false;
     }
 }
 ////////
@@ -1082,7 +1082,7 @@ function stoptime() {
     BGMStage1.pause();
     BGMStage2.pause();
     BGMStage3.pause();
-    timeStop9-game-cj/sound.play();
+    timeStopSound.play();
 }
 var tempBgSpeed;
 function cancelCountdownTimer(timerName) {
@@ -1124,7 +1124,7 @@ function cancelCountdownTimer(timerName) {
         sharkGroup.setAll('animations.paused', false, false);
         sharkGroup.setAll('body.velocity.y', 500, false, false);
 
-        ////9-game-cj/sound
+        ////Sound
         if (stateHandle == 1) {
             BGMStage1.resume();
             BGMStage1.volume = 0.2;
@@ -1226,7 +1226,7 @@ function checkAccuracy() {
             difficulty++;
         }
         pic += 25 * (numOfArrow * 1.5) * (1 + (perfectStack / 10));
-        perfect9-game-cj/sound.play();
+        perfectSound.play();
         result = true;
         //////////animation wippo
         wippo.animations.play("rush");
@@ -1240,7 +1240,7 @@ function checkAccuracy() {
         bgSpeed = perfectSpeed * 90 / 100;
         pic += 20 * (numOfArrow * 1.5);
         perfectStack = 0;
-        great9-game-cj/sound.play();
+        greatSound.play();
         result = true;
         wippo.animations.play("rush");
     }
@@ -1256,7 +1256,7 @@ function checkAccuracy() {
             difficulty--;
         }
         perfectStack = 0;
-        cool9-game-cj/sound.play();
+        coolSound.play();
         result = true;
         wippo.animations.play("rush");
     }
@@ -1272,7 +1272,7 @@ function checkAccuracy() {
             difficulty -= 3;
         }
         perfectStack = 0;
-        bad9-game-cj/sound.play();
+        badSound.play();
         result = true;
         wippo.animations.play("rush");
     }
@@ -1342,7 +1342,7 @@ function collectArrow() {
                 //animations
             } else {
                 refreshWave();
-                wrongButton9-game-cj/sound.play();
+                wrongButtonSound.play();
             }
         } else if (cursors.down.isDown && !isDownHoldDown) {
             isDownHoldDown = true;
@@ -1361,7 +1361,7 @@ function collectArrow() {
                 //animations
             } else {
                 refreshWave();
-                wrongButton9-game-cj/sound.play();
+                wrongButtonSound.play();
             }
         }
         else if (cursors.right.isDown && !isRightHoldDown) {
@@ -1381,7 +1381,7 @@ function collectArrow() {
                 //animations
             } else {
                 refreshWave();
-                wrongButton9-game-cj/sound.play();
+                wrongButtonSound.play();
             }
         } else if (cursors.left.isDown && !isLeftHoldDown) {
             isLeftHoldDown = true;
@@ -1400,7 +1400,7 @@ function collectArrow() {
                 //animations
             } else {
                 refreshWave();
-                wrongButton9-game-cj/sound.play();
+                wrongButtonSound.play();
             }
         }
         if (cursors.up.isUp)
@@ -1630,7 +1630,7 @@ gameBegin = function () {
 }
 gameEnd = function () {
     //playDeathAnimation
-    fall9-game-cj/sound.play();
+    fallSound.play();
     if (stateHandle == 1) {
         BGMStage1.fadeOut(1500);
     } else if (stateHandle == 2) {
@@ -1658,7 +1658,7 @@ gameEnd = function () {
     smoke.alpha = 0;
 }
 function toGameplay() {
-    startBtn9-game-cj/sound.play();
+    startBtnSound.play();
     game.state.start('main');
 }
 function toHowToPlay() {
