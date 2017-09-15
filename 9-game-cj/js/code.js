@@ -983,11 +983,11 @@ function updateGameplay() {
 function muteSounds() {
     isSound = !isSound;
     if (!isSound) {
-        game.Sound.mute = true;
+        game.sound.mute = true;
         mute.frame = 1;
     } else {
         mute.frame = 0;
-        game.Sound.mute = false;
+        game.sound.mute = false;
     }
 }
 ////////
