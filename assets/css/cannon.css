@@ -1,5 +1,10 @@
 @import url('fontface-thaisansneue.css');
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
+@font-face {
+  font-family: 'super';
+  src: url('../../9-game-cj/font/supermarket.ttf');
+}
 html{
   overflow-x: hidden;
 }
